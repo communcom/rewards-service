@@ -1,0 +1,49 @@
+version: '2.1'
+services:
+  rewards-mongo:
+    container_name: rewards-mongo
+    image: mongo
+    restart: always
+    healthcheck:
+      test: mongo --eval 'db.getCollectionNames()'
+      interval: 10s
+      timeout: 2s
+      retries: 10
+    volumes:
+      - rewards-mongodb-vol:/data/db
+    ports:
+      - 127.0.0.1:27017:27017
+    networks:
+      - services-tier
+
+  slave-mongo:
+    container_name: slave-mongo
+    image: mongo
+    ports:
+      - 27018:27017
+    restart: always
+    networks:
+      - services-tier
+
+  rewards-node:
+    container_name: rewards-node
+    restart: always
+    depends_on:
+      rewards-mongo:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - services-tier
+    ports:
+      - $GLS_CONNECTOR_HOST:$GLS_CONNECTOR_PORT:$GLS_CONNECTOR_PORT
+    env_file:
+      - .env
+
+
+volumes:
+  rewards-mongodb-vol:
+
+networks:
+  services-tier:
