@@ -29,6 +29,28 @@ class Connector extends BasicConnector {
                         },
                     },
                 },
+                getStateBulk: {
+                    handler: this._gallery.getStateBulk,
+                    scope: this._gallery,
+                    validation: {
+                        properties: {
+                            posts: {
+                                maxItems: 20,
+                                items: {
+                                    required: ['userId', 'permlink'],
+                                    properties: {
+                                        userId: {
+                                            type: 'string',
+                                        },
+                                        permlink: {
+                                            type: 'string',
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
             },
         });
     }
