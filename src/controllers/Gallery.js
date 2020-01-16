@@ -9,6 +9,29 @@ class Gallery extends BasicService {
         this._forkService = forkService;
     }
 
+    async handleTop({ tracery }) {
+        const previousModel = await Mosaic.findOneAndUpdate(
+            { tracery },
+            { $inc: { topCount: 1 } },
+            { upsert: true }
+        );
+
+        if (!previousModel) {
+            return;
+        }
+
+        await this.registerForkChanges({
+            type: 'update',
+            Model: Mosaic,
+            documentId: previousModel._id,
+            data: {
+                $inc: {
+                    topCount: -1,
+                },
+            },
+        });
+    }
+
     async handleMosaicState(state) {
         const { tracery } = state;
 
@@ -29,16 +52,34 @@ class Gallery extends BasicService {
             }
         );
 
-        await this.registerForkChanges({
-            type: 'update',
-            Model: Mosaic,
-            documentId: previousModel._id,
-            data: {
-                $set: {
-                    ...previousModel.toObject(),
+        if (previousModel) {
+            await this.registerForkChanges({
+                type: 'update',
+                Model: Mosaic,
+                documentId: previousModel._id,
+                data: {
+                    $set: {
+                        ...previousModel.toObject(),
+                    },
                 },
-            },
-        });
+            });
+        } else {
+            const newModel = await Mosaic.create({
+                tracery,
+                collectionEnd: state.collection_end_date,
+                gemCount: state.gem_count,
+                shares: state.shares,
+                damnShares: state.damn_shares,
+                reward: state.reward,
+                banned: state.banned,
+            });
+
+            await this.registerForkChanges({
+                type: 'create',
+                Model: Mosaic,
+                documentId: newModel.toObject()._id,
+            });
+        }
     }
 
     async registerForkChanges(changes) {

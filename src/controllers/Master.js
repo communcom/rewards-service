@@ -21,13 +21,25 @@ class Master {
         };
 
         for (const stageKey of Object.keys(flow)) {
-            await Promise.all(
-                flow[stageKey].map(wrappedAction =>
-                    wrappedAction().catch(error => {
-                        Logger.warn(error);
-                    })
-                )
-            );
+            switch (stageKey) {
+                case 'galleryEvents':
+                    for (const wrappedEvent of flow[stageKey]) {
+                        try {
+                            await wrappedEvent();
+                        } catch (error) {
+                            Logger.warn(error);
+                        }
+                    }
+                    break;
+                default:
+                    await Promise.all(
+                        flow[stageKey].map(wrappedAction =>
+                            wrappedAction().catch(error => {
+                                Logger.warn(error);
+                            })
+                        )
+                    );
+            }
         }
 
         this._clearActions();
@@ -36,11 +48,12 @@ class Master {
     async _disperseAction(action) {
         if (action.events) {
             for (const event of action.events) {
-                switch (event.code) {
+                switch (event.event) {
                     case 'mosaicstate':
-                        this._galleryEvents.push(() =>
-                            this._gallery.handleMosaicState(event.event, event.args)
-                        );
+                        this._galleryEvents.push(() => this._gallery.handleMosaicState(event.args));
+                        break;
+                    case 'mosaictop':
+                        this._galleryEvents.push(() => this._gallery.handleTop(event.args));
                         break;
                     default:
                         break;

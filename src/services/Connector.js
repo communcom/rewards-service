@@ -14,10 +14,20 @@ class Connector extends BasicConnector {
     async start() {
         await super.start({
             serverRoutes: {
-                quickSearch: {
+                getState: {
                     handler: this._gallery.getState,
                     scope: this._gallery,
-                    validation: {},
+                    validation: {
+                        required: ['userId', 'permlink'],
+                        properties: {
+                            userId: {
+                                type: 'string',
+                            },
+                            permlink: {
+                                type: 'string',
+                            },
+                        },
+                    },
                 },
             },
         });

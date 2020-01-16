@@ -26,6 +26,10 @@ module.exports = MongoDB.makeModel(
         banned: {
             type: Boolean,
         },
+        topCount: {
+            type: Number,
+            default: 0,
+        },
     },
     {
         index: [
