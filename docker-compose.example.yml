@@ -16,15 +16,6 @@ services:
     networks:
       - services-tier
 
-  slave-mongo:
-    container_name: slave-mongo
-    image: mongo
-    ports:
-      - 27018:27017
-    restart: always
-    networks:
-      - services-tier
-
   rewards-node:
     container_name: rewards-node
     restart: always
