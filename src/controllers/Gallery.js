@@ -1,10 +1,10 @@
 const core = require('cyberway-core-service');
-const BasicService = core.services.Basic;
+const { Service } = core.services;
 const Mosaic = require('../models/Mosaic');
 const Gem = require('../models/Gem');
 const { calculateTracery } = require('../utils/mosaic');
 
-class Gallery extends BasicService {
+class Gallery extends Service {
     constructor({ forkService, ...args }) {
         super(args);
         this._forkService = forkService;
