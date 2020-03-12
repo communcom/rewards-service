@@ -1,12 +1,91 @@
 const core = require('cyberway-core-service');
-const { Logger } = core.utils;
 const BasicService = core.services.Basic;
 const Mosaic = require('../models/Mosaic');
+const Gem = require('../models/Gem');
 
 class Gallery extends BasicService {
     constructor({ forkService, ...args }) {
         super(args);
         this._forkService = forkService;
+    }
+
+    async handleGemState({
+        tracery,
+        owner,
+        creator,
+        points: frozenPoints,
+        pledge_points: pledgePoints,
+        damn,
+        shares,
+        blockTime,
+    }) {
+        const communityId = pledgePoints.split(' ')[1];
+
+        const data = {
+            tracery,
+            owner,
+            creator,
+            frozenPoints,
+            pledgePoints,
+            damn,
+            shares,
+            communityId,
+            blockTime,
+        };
+        const previousModel = await Gem.findOneAndUpdate(
+            { tracery, owner },
+            { $set: data },
+            { lean: true }
+        );
+
+        if (previousModel) {
+            await this.registerForkChanges({
+                type: 'update',
+                Model: Gem,
+                documentId: previousModel._id,
+                data: {
+                    $set: {
+                        ...previousModel,
+                    },
+                },
+            });
+        } else {
+            const newModel = await Gem.create(data);
+
+            await this.registerForkChanges({
+                type: 'create',
+                Model: Gem,
+                documentId: newModel.toObject()._id,
+            });
+        }
+    }
+
+    async handleGemChop({ tracery, owner }) {
+        const previousModel = await Gem.findOneAndUpdate(
+            { tracery, owner },
+            {
+                $set: {
+                    isChopped: true,
+                    isClaimable: false,
+                },
+            }
+        );
+
+        if (!previousModel) {
+            return;
+        }
+
+        await this.registerForkChanges({
+            type: 'update',
+            Model: Gem,
+            documentId: previousModel._id,
+            data: {
+                $set: {
+                    isChopped: false,
+                    isClaimable: true,
+                },
+            },
+        });
     }
 
     async handleTop({ tracery }) {

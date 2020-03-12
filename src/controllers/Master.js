@@ -45,7 +45,7 @@ class Master {
         this._clearActions();
     }
 
-    async _disperseAction(action) {
+    async _disperseAction(action, { blockTime }) {
         if (action.events) {
             for (const event of action.events) {
                 switch (event.event) {
@@ -54,6 +54,14 @@ class Master {
                         break;
                     case 'mosaictop':
                         this._galleryEvents.push(() => this._gallery.handleTop(event.args));
+                        break;
+                    case 'gemstate':
+                        this._galleryEvents.push(() =>
+                            this._gallery.handleGemState({ ...event.args, blockTime })
+                        );
+                        break;
+                    case 'gemchop':
+                        this._galleryEvents.push(() => this._gallery.handleGemChop(event.args));
                         break;
                     default:
                         break;
