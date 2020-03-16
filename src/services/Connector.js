@@ -1,7 +1,7 @@
 const core = require('cyberway-core-service');
 const BasicConnector = core.services.Connector;
-const env = require('../data/env');
 const Gallery = require('../controllers/connector/Gallery');
+const Rewards = require('../controllers/connector/Rewards');
 
 class Connector extends BasicConnector {
     constructor() {
@@ -9,11 +9,48 @@ class Connector extends BasicConnector {
 
         const linking = { connector: this };
         this._gallery = new Gallery(linking);
+        this._rewards = new Rewards(linking);
     }
 
     async start() {
         await super.start({
             serverRoutes: {
+                getUsersWithRewards: {
+                    handler: this._rewards.getUsersWithRewards,
+                    scope: this._rewards,
+                    validation: {
+                        properties: {
+                            limit: {
+                                type: 'number',
+                                default: 10,
+                            },
+                            offset: {
+                                type: 'number',
+                                default: 0,
+                            },
+                        },
+                    },
+                },
+                getUserRewards: {
+                    handler: this._rewards.getUsersRewards,
+                    scope: this._rewards,
+                    validation: {
+                        required: ['userId'],
+                        properties: {
+                            limit: {
+                                type: 'number',
+                                default: 10,
+                            },
+                            offset: {
+                                type: 'number',
+                                default: 0,
+                            },
+                            userId: {
+                                type: 'string',
+                            },
+                        },
+                    },
+                },
                 getState: {
                     handler: this._gallery.getState,
                     scope: this._gallery,
