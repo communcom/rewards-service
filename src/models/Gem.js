@@ -42,6 +42,14 @@ module.exports = MongoDB.makeModel(
             type: Date,
             required: true,
         },
+        blockNum: {
+            type: Number,
+            required: true,
+        },
+        reward: {
+            type: Number,
+            default: 0,
+        },
     },
     {
         index: [
@@ -64,6 +72,17 @@ module.exports = MongoDB.makeModel(
                 fields: {
                     blockTime: -1,
                     isChopped: -1,
+                },
+            },
+            {
+                fields: {
+                    isChopped: -1,
+                    isClaimable: -1,
+                },
+            },
+            {
+                fields: {
+                    owner: 1,
                 },
             },
         ],
