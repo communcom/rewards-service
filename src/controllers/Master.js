@@ -57,7 +57,7 @@ class Master {
                         break;
                     case 'gemstate':
                         this._galleryEvents.push(() =>
-                            this._gallery.handleGemState({ ...event.args, blockTime })
+                            this._gallery.handleGemState({ ...event.args, blockTime, blockNum })
                         );
                         break;
                     case 'gemchop':
