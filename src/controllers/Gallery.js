@@ -121,7 +121,7 @@ class Gallery extends BasicService {
             {
                 $set: {
                     tracery,
-                    collectionEnd: state.collection_end_date,
+                    collectionEnd: state.collection_end_date + 'Z',
                     gemCount: state.gem_count,
                     shares: state.shares,
                     damnShares: state.damn_shares,
