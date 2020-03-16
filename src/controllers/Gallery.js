@@ -18,6 +18,7 @@ class Gallery extends BasicService {
         damn,
         shares,
         blockTime,
+        blockNum,
     }) {
         const communityId = pledgePoints.split(' ')[1];
 
@@ -30,8 +31,8 @@ class Gallery extends BasicService {
             damn,
             shares,
             communityId,
-            blockTime,
         };
+
         const previousModel = await Gem.findOneAndUpdate(
             { tracery, owner },
             { $set: data },
@@ -50,7 +51,7 @@ class Gallery extends BasicService {
                 },
             });
         } else {
-            const newModel = await Gem.create(data);
+            const newModel = await Gem.create({ ...data, blockTime, blockNum });
 
             await this.registerForkChanges({
                 type: 'create',
