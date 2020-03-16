@@ -50,6 +50,17 @@ module.exports = MongoDB.makeModel(
             type: Number,
             default: 0,
         },
+        contentId: {
+            permlink: {
+                type: String,
+            },
+            userId: {
+                type: String,
+            },
+            communityId: {
+                type: String,
+            },
+        },
     },
     {
         index: [

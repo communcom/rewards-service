@@ -2,11 +2,30 @@ const core = require('cyberway-core-service');
 const BasicService = core.services.Basic;
 const Mosaic = require('../models/Mosaic');
 const Gem = require('../models/Gem');
+const { calculateTracery } = require('../utils/mosaic');
 
 class Gallery extends BasicService {
     constructor({ forkService, ...args }) {
         super(args);
         this._forkService = forkService;
+    }
+
+    async handlePostCreate({ message_id: messageId, commun_code: communityId }) {
+        const { author: userId, permlink } = messageId;
+        const tracery = calculateTracery(userId, permlink);
+
+        await Gem.update(
+            { tracery },
+            {
+                $set: {
+                    contentId: {
+                        userId,
+                        permlink,
+                        communityId,
+                    },
+                },
+            }
+        );
     }
 
     async handleGemState({

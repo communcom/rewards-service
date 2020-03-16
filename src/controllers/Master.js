@@ -9,6 +9,7 @@ class Master {
         this._community = new Community({ connector, forkService });
 
         this._galleryEvents = [];
+        this._postCreateActions = [];
         this._communityEvents = [];
     }
 
@@ -22,6 +23,7 @@ class Master {
         const flow = {
             communityEvents: this._communityEvents,
             galleryEvents: this._galleryEvents,
+            postCreateActions: this._postCreateActions,
         };
 
         for (const stageKey of Object.keys(flow)) {
@@ -57,6 +59,9 @@ class Master {
                 break;
             case 'c.list->setsysparams':
                 this._communityEvents.push(() => this._community.handleSetSysParams(action.args));
+                break;
+            case 'c.gallery->create':
+                this._postCreateActions.push(() => this._gallery.handlePostCreate(action.args));
                 break;
         }
 
