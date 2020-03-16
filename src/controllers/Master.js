@@ -1,12 +1,15 @@
 const { Logger } = require('cyberway-core-service').utils;
 
 const Gallery = require('./Gallery');
+const Community = require('./Community');
 
 class Master {
     constructor({ connector, forkService }) {
         this._gallery = new Gallery({ connector, forkService });
+        this._community = new Community({ connector, forkService });
 
         this._galleryEvents = [];
+        this._communityEvents = [];
     }
 
     async disperse({ transactions, blockNum, blockTime }) {
@@ -17,6 +20,7 @@ class Master {
         }
 
         const flow = {
+            communityEvents: this._communityEvents,
             galleryEvents: this._galleryEvents,
         };
 
@@ -45,7 +49,17 @@ class Master {
         this._clearActions();
     }
 
-    async _disperseAction(action, { blockTime }) {
+    async _disperseAction(action, { blockTime, blockNum }) {
+        const pathName = [action.code, action.action].join('->');
+        switch (pathName) {
+            case 'c.list->create':
+                this._communityEvents.push(() => this._community.handleCreate(action.args));
+                break;
+            case 'c.list->setsysparams':
+                this._communityEvents.push(() => this._community.handleSetSysParams(action.args));
+                break;
+        }
+
         if (action.events) {
             for (const event of action.events) {
                 switch (event.event) {
@@ -72,6 +86,7 @@ class Master {
 
     _clearActions() {
         this._galleryEvents = [];
+        this._communityEvents = [];
     }
 }
 
