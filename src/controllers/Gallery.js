@@ -65,7 +65,12 @@ class Gallery extends BasicService {
                 documentId: previousModel._id,
                 data: {
                     $set: {
-                        ...previousModel,
+                        creator: previousModel.creator,
+                        frozenPoints: previousModel.frozenPoints,
+                        pledgePoints: previousModel.pledgePoints,
+                        damn: previousModel.damn,
+                        shares: previousModel.shares,
+                        communityId: previousModel.communityId,
                     },
                 },
             });
@@ -75,7 +80,7 @@ class Gallery extends BasicService {
             await this.registerForkChanges({
                 type: 'create',
                 Model: Gem,
-                documentId: newModel.toObject()._id,
+                documentId: newModel._id,
             });
         }
     }
@@ -158,7 +163,12 @@ class Gallery extends BasicService {
                 documentId: previousModel._id,
                 data: {
                     $set: {
-                        ...previousModel.toObject(),
+                        collectionEnd: previousModel.collectionEnd,
+                        gemCount: previousModel.gemCount,
+                        shares: previousModel.shares,
+                        damnShares: previousModel.damnShares,
+                        reward: previousModel.reward,
+                        banned: previousModel.banned,
                     },
                 },
             });
@@ -176,7 +186,7 @@ class Gallery extends BasicService {
             await this.registerForkChanges({
                 type: 'create',
                 Model: Mosaic,
-                documentId: newModel.toObject()._id,
+                documentId: newModel._id,
             });
         }
     }

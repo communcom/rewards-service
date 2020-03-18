@@ -14,7 +14,7 @@ class Community extends BasicService {
         await this.registerForkChanges({
             type: 'create',
             Model: CommunityModel,
-            documentId: newCommunity.toObject()._id,
+            documentId: newCommunity._id,
         });
     }
 
@@ -24,8 +24,6 @@ class Community extends BasicService {
         collection_period: collectionPeriod,
         moderation_period: moderationPeriod,
         extra_reward_period: extraRewardPeriod,
-        blockTime,
-        blockNum,
     }) {
         const data = {};
         if (name !== null) {
@@ -59,7 +57,10 @@ class Community extends BasicService {
             documentId: previousModel._id,
             data: {
                 $set: {
-                    ...previousModel,
+                    name: previousModel.name,
+                    collectionPeriod: previousModel.collectionPeriod,
+                    moderationPeriod: previousModel.moderationPeriod,
+                    extraRewardPeriod: previousModel.extraRewardPeriod,
                 },
             },
         });
