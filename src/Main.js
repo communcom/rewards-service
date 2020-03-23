@@ -3,6 +3,7 @@ const BasicMain = core.services.BasicMain;
 const env = require('./data/env');
 const Parser = require('./services/Parser');
 const Fork = require('./services/Fork');
+const RewardsCalculator = require('./services/RewardsCalculator');
 const Connector = require('./services/Connector');
 
 class Main extends BasicMain {
@@ -12,11 +13,12 @@ class Main extends BasicMain {
         let parser;
 
         const fork = new Fork();
+        const rewardsCalculator = new RewardsCalculator();
 
         parser = new Parser();
         parser.setForkService(fork);
 
-        this.addNested(fork, parser);
+        this.addNested(fork, parser, rewardsCalculator);
 
         const connector = new Connector({ parser });
 
