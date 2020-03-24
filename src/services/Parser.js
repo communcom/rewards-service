@@ -1,12 +1,11 @@
 const core = require('cyberway-core-service');
-const BasicService = core.services.Basic;
-const BlockSubscribe = core.services.BlockSubscribe;
+const { Service, BlockSubscribe } = core.services;
 const { Logger } = core.utils;
 
 const env = require('../data/env');
 const MasterController = require('../controllers/Master');
 
-class Prism extends BasicService {
+class Prism extends Service {
     constructor({ ...options } = {}) {
         super(options);
 
@@ -155,9 +154,9 @@ class Prism extends BasicService {
 
     async _revertLastBlock() {
         try {
-            await this._forkService.revertLastBlock(this._subscriber);
+            await this._forkService.revertUnfinalizedBlocks(this._subscriber);
         } catch (error) {
-            Logger.error('Cant revert last block, but continue:', error);
+            Logger.error('Cant revert unfinalized blocks, but continue:', err);
         }
     }
 }
