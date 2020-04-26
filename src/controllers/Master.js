@@ -22,8 +22,8 @@ class Master {
 
         const flow = {
             communityEvents: this._communityEvents,
-            galleryEvents: this._galleryEvents,
             postCreateActions: this._postCreateActions,
+            galleryEvents: this._galleryEvents,
         };
 
         for (const stageKey of Object.keys(flow)) {
