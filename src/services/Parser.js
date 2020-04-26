@@ -101,8 +101,9 @@ class Prism extends Service {
 
     async _handleBlock(block) {
         try {
-            await this._forkService.initBlock(block);
-            await this._master.disperse(block);
+            await this._forkService.wrapBlock(block, async block => {
+                await this._master.disperse(block);
+            });
 
             this._emitHandled(block);
         } catch (error) {
