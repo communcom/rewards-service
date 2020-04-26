@@ -9,7 +9,7 @@ class Rewards extends BasicController {
 
     async getUsersWithRewards({ limit, offset }) {
         const [groupOfUsersWithRewards] = await Gem.aggregate([
-            { $match: { isClaimable: true } },
+            { $match: { isClaimable: true, reward: { $gt: 0 } } },
             { $limit: limit },
             { $skip: offset },
             { $project: { userId: '$owner' } },
@@ -30,7 +30,7 @@ class Rewards extends BasicController {
 
     async getUsersRewards({ userId, limit, offset }) {
         const rewards = await Gem.find(
-            { owner: userId, isClaimable: true },
+            { owner: userId, isClaimable: true, reward: { $gt: 0 } },
             {
                 _id: false,
                 reward: true,
