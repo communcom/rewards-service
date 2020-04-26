@@ -1,5 +1,6 @@
 const core = require('cyberway-core-service');
-const BasicMain = core.services.BasicMain;
+const { BasicMain, ForkManager } = core.services;
+
 const env = require('./data/env');
 const Parser = require('./services/Parser');
 const Fork = require('./services/Fork');
@@ -12,12 +13,15 @@ class Main extends BasicMain {
 
         let parser;
 
-        const fork = new Fork();
         const rewardsCalculator = new RewardsCalculator();
+        const fork = new ForkManager({
+            resolveModel: modelName => require(`./models/${modelName}`),
+        });
 
-        parser = new Parser();
+        const parser = new Parser();
         parser.setForkService(fork);
 
+        const rewardsCalculator = new RewardsCalculator();
         this.addNested(fork, parser, rewardsCalculator);
 
         const connector = new Connector({ parser });
