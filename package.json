@@ -1,6 +1,6 @@
 {
   "name": "rewards-service",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "./src/index.js",
   "scripts": {
@@ -10,11 +10,11 @@
   "license": "GPL-3.0",
   "dependencies": {
     "bytebuffer": "^5.0.1",
-    "cyberway-core-service": "^3.55.6",
+    "cyberway-core-service": "^3.58.4",
     "cyberwayjs": "^20.0.0-beta7",
+    "eosjs-ecc": "latest",
     "mongodb": "^3.2.7",
-    "node-nats-streaming": "^0.2.4",
-    "eosjs-ecc": "latest"
+    "node-nats-streaming": "^0.2.4"
   },
   "devDependencies": {
     "prettier": "^1.18.2"
