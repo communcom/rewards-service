@@ -1,5 +1,8 @@
 const core = require('cyberway-core-service');
 const BasicConnector = core.services.Connector;
+
+const env = require('../data/env');
+
 const Gallery = require('../controllers/connector/Gallery');
 const Rewards = require('../controllers/connector/Rewards');
 
@@ -88,6 +91,9 @@ class Connector extends BasicConnector {
                         },
                     },
                 },
+            },
+            requiredClients: {
+                facade: env.GLS_FACADE_CONNECT,
             },
         });
     }

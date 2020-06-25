@@ -7,5 +7,6 @@ module.exports = {
     GLS_DONT_REVERT_LAST_BLOCK: Boolean(
         env.GLS_DONT_REVERT_LAST_BLOCK && env.GLS_DONT_REVERT_LAST_BLOCK !== 'false'
     ),
+    GLS_FETCH_POINTS_PRICES_INTERVAL: Number(env.GLS_FETCH_POINTS_PRICES_INTERVAL) || 3600000,
     ...env,
 };
