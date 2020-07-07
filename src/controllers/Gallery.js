@@ -139,6 +139,13 @@ class Gallery extends Service {
     async handleMosaicState(state) {
         const { tracery } = state;
 
+        const collectionEnd = state.collection_end_date + 'Z';
+
+        let displayReward;
+        if (new Date(collectionEnd) > Date.now()) {
+            displayReward = state.reward;
+        }
+
         const previousModel = await Mosaic.findOneAndUpdate(
             {
                 tracery,
@@ -146,12 +153,13 @@ class Gallery extends Service {
             {
                 $set: {
                     tracery,
-                    collectionEnd: state.collection_end_date + 'Z',
+                    collectionEnd,
                     gemCount: state.gem_count,
                     shares: state.shares,
                     damnShares: state.damn_shares,
                     reward: state.reward,
                     banned: state.banned,
+                    displayReward,
                 },
             }
         );
@@ -169,6 +177,8 @@ class Gallery extends Service {
                         damnShares: previousModel.damnShares,
                         reward: previousModel.reward,
                         banned: previousModel.banned,
+                        // do not change display reward if it hasn't been changed
+                        displayReward: displayReward ? previousModel.displayReward : undefined,
                     },
                 },
             });
