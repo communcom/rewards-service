@@ -56,6 +56,7 @@ class Gallery extends BasicController {
                 $project: {
                     topCount: 1,
                     reward: 1,
+                    displayReward: 1,
                     collectionEnd: 1,
                     tracery: 1,
                     _id: 0,
@@ -71,7 +72,7 @@ class Gallery extends BasicController {
         for (const mosaic of mosaics) {
             if (userId) {
                 const gems = await Gem.find(
-                    { 'contentId.userId': userId, tracery: mosaic.tracery, isClaimable: true },
+                    { 'contentId.userId': userId, tracery: mosaic.tracery },
                     { reward: 1 },
                     { lean: true }
                 );

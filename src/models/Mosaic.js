@@ -23,6 +23,9 @@ module.exports = MongoDB.makeModel(
         reward: {
             type: String,
         },
+        displayReward: {
+            type: String,
+        },
         banned: {
             type: Boolean,
         },
