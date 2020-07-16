@@ -13,7 +13,8 @@ class Community extends BasicService {
 
         await this.registerForkChanges({
             type: 'create',
-            Model: CommunityModel,
+            // todo: migrate to new fork service
+            Model: { className: 'Community' },
             documentId: newCommunity._id,
         });
     }
@@ -53,7 +54,8 @@ class Community extends BasicService {
 
         await this.registerForkChanges({
             type: 'update',
-            Model: CommunityModel,
+            // todo: migrate to new fork service
+            Model: { className: 'Community' },
             documentId: previousModel._id,
             data: {
                 $set: {
