@@ -61,8 +61,7 @@ class Gallery extends Service {
         if (previousModel) {
             await this.registerForkChanges({
                 type: 'update',
-                // todo: migrate to new fork service
-                Model: { className: 'Gem' },
+                Model: Gem,
                 documentId: previousModel._id,
                 data: {
                     $set: {
@@ -80,8 +79,7 @@ class Gallery extends Service {
 
             await this.registerForkChanges({
                 type: 'create',
-                // todo: migrate to new fork service
-                Model: { className: 'Gem' },
+                Model: Gem,
                 documentId: newModel._id,
             });
         }
@@ -104,8 +102,7 @@ class Gallery extends Service {
 
         await this.registerForkChanges({
             type: 'update',
-            // todo: migrate to new fork service
-            Model: { className: 'Gem' },
+            Model: Gem,
             documentId: previousModel._id,
             data: {
                 $set: {
@@ -129,8 +126,7 @@ class Gallery extends Service {
 
         await this.registerForkChanges({
             type: 'update',
-            // todo: migrate to new fork service
-            Model: { className: 'Mosaic' },
+            Model: Mosaic,
             documentId: previousModel._id,
             data: {
                 $inc: {
@@ -171,8 +167,7 @@ class Gallery extends Service {
         if (previousModel) {
             await this.registerForkChanges({
                 type: 'update',
-                // todo: migrate to new fork service
-                Model: { className: 'Mosaic' },
+                Model: Mosaic,
                 documentId: previousModel._id,
                 data: {
                     $set: {
@@ -200,8 +195,7 @@ class Gallery extends Service {
 
             await this.registerForkChanges({
                 type: 'create',
-                // todo: migrate to new fork service
-                Model: { className: 'Mosaic' },
+                Model: Mosaic,
                 documentId: newModel._id,
             });
         }
