@@ -10,7 +10,7 @@
   "license": "GPL-3.0",
   "dependencies": {
     "bytebuffer": "^5.0.1",
-    "cyberway-core-service": "^3.58.4",
+    "cyberway-core-service": "^3.59.3",
     "cyberwayjs": "^20.0.0-beta7",
     "eosjs-ecc": "latest",
     "mongodb": "^3.2.7",

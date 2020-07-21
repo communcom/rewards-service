@@ -56,6 +56,7 @@ class Gallery extends BasicController {
                 $project: {
                     topCount: 1,
                     reward: 1,
+                    displayReward: 1,
                     collectionEnd: 1,
                     tracery: 1,
                     _id: 0,
@@ -71,7 +72,7 @@ class Gallery extends BasicController {
         for (const mosaic of mosaics) {
             if (userId) {
                 const gems = await Gem.find(
-                    { 'contentId.userId': userId, tracery: mosaic.tracery, isClaimable: true },
+                    { 'contentId.userId': userId, tracery: mosaic.tracery },
                     { reward: 1 },
                     { lean: true }
                 );
@@ -97,6 +98,21 @@ class Gallery extends BasicController {
                     };
                 }
             }
+
+            const [rewardAmount, symbol] = mosaic.reward.split(' ');
+
+            if (parseFloat(rewardAmount) && this.pointsPrices) {
+                const cmn = parseFloat(rewardAmount / this.pointsPrices.prices[symbol]).toFixed(4);
+
+                // TODO get from price feed
+                const usd = parseFloat(cmn * env.COMMUN_PRICE).toFixed(2);
+
+                mosaic.convertedReward = {
+                    cmn,
+                    usd,
+                };
+            }
+
             mosaic.isClosed = Date.now() - mosaic.collectionEnd >= 0;
             mosaic.contentId = traceryContentIdMap.get(mosaic.tracery);
         }
