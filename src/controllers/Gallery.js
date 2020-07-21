@@ -61,7 +61,8 @@ class Gallery extends Service {
         if (previousModel) {
             await this.registerForkChanges({
                 type: 'update',
-                Model: Gem,
+                // todo: migrate to new fork service
+                Model: { className: 'Gem' },
                 documentId: previousModel._id,
                 data: {
                     $set: {
@@ -79,7 +80,8 @@ class Gallery extends Service {
 
             await this.registerForkChanges({
                 type: 'create',
-                Model: Gem,
+                // todo: migrate to new fork service
+                Model: { className: 'Gem' },
                 documentId: newModel._id,
             });
         }
@@ -102,7 +104,8 @@ class Gallery extends Service {
 
         await this.registerForkChanges({
             type: 'update',
-            Model: Gem,
+            // todo: migrate to new fork service
+            Model: { className: 'Gem' },
             documentId: previousModel._id,
             data: {
                 $set: {
@@ -126,7 +129,8 @@ class Gallery extends Service {
 
         await this.registerForkChanges({
             type: 'update',
-            Model: Mosaic,
+            // todo: migrate to new fork service
+            Model: { className: 'Mosaic' },
             documentId: previousModel._id,
             data: {
                 $inc: {
@@ -167,7 +171,8 @@ class Gallery extends Service {
         if (previousModel) {
             await this.registerForkChanges({
                 type: 'update',
-                Model: Mosaic,
+                // todo: migrate to new fork service
+                Model: { className: 'Mosaic' },
                 documentId: previousModel._id,
                 data: {
                     $set: {
@@ -195,7 +200,8 @@ class Gallery extends Service {
 
             await this.registerForkChanges({
                 type: 'create',
-                Model: Mosaic,
+                // todo: migrate to new fork service
+                Model: { className: 'Mosaic' },
                 documentId: newModel._id,
             });
         }
