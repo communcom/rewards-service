@@ -137,13 +137,27 @@ class Gallery extends Service {
     }
 
     async handleMosaicState(state) {
-        const { tracery } = state;
+        const { tracery, reward } = state;
 
         const collectionEnd = state.collection_end_date + 'Z';
 
         let displayReward;
-        if (new Date(collectionEnd) > Date.now()) {
-            displayReward = state.reward;
+        if (new Date(collectionEnd) > new Date(Date.now())) {
+            displayReward = reward;
+        }
+
+        const updatesToSet = {
+            tracery,
+            collectionEnd,
+            gemCount: state.gem_count,
+            shares: state.shares,
+            damnShares: state.damn_shares,
+            reward,
+            banned: state.banned,
+        };
+
+        if (displayReward) {
+            updatesToSet.displayReward = displayReward;
         }
 
         const previousModel = await Mosaic.findOneAndUpdate(
@@ -151,16 +165,7 @@ class Gallery extends Service {
                 tracery,
             },
             {
-                $set: {
-                    tracery,
-                    collectionEnd,
-                    gemCount: state.gem_count,
-                    shares: state.shares,
-                    damnShares: state.damn_shares,
-                    reward: state.reward,
-                    banned: state.banned,
-                    displayReward,
-                },
+                $set: updatesToSet,
             }
         );
 
