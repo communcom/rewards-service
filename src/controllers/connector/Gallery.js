@@ -81,6 +81,22 @@ class Gallery extends BasicController {
                     (totalReward, { reward }) => totalReward + reward,
                     0
                 );
+
+                const [rewardAmount, symbol] = mosaic.reward.split(' ');
+
+                if (parseFloat(rewardAmount) && this.pointsPrices) {
+                    const cmn = parseFloat(rewardAmount / this.pointsPrices.prices[symbol]).toFixed(
+                        4
+                    );
+
+                    // TODO get from price feed
+                    const usd = parseFloat(cmn * env.COMMUN_PRICE).toFixed(2);
+
+                    mosaic.convertedReward = {
+                        cmn,
+                        usd,
+                    };
+                }
             }
 
             const [rewardAmount, symbol] = mosaic.reward.split(' ');
